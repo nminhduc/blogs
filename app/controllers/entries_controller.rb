@@ -3,19 +3,20 @@ class EntriesController < ApplicationController
   before_action :correct_user,   only: :destroy
 
   def create
-    @entry = current_user.entries.build(entries_params)
+    @entry = current_user.entries.build(entry_params)
     if @entry.save
-      flash[:success] = "Entry created!"
+      flash[:success] = 'Entry created!'
       redirect_to root_url
     else
-      @feed_items = []
+      @feed_items = current_user.feed.paginate(page: params[:page])
       render 'static_pages/home'
     end
   end
   def show
     @entry = Entry.find(params[:id])
-     @comments = @entry.comments.paginate(page: params[:page])
-     @comment = current_user.comments.build entry_id: @entry.id
+    @comments = @entry.comments.paginate(page: params[:page])
+    @comment = Comment.new
+    @user = current_user
   end
 	def index
 		@entry = Entry.paginate(page: params[:page])
@@ -30,9 +31,10 @@ class EntriesController < ApplicationController
  
   private
 
-    def entries_params
-      params.require(:entry).permit(:body)
-    end
+  def entry_params
+    params.require(:entry).permit(:title, :body, :date)
+  end
+
     def correct_user
       @entry = current_user.entries.find_by(id: params[:id])
       redirect_to root_url if @entry.nil?

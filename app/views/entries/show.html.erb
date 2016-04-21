@@ -1,18 +1,29 @@
-
-
 <% provide(:title, @entry.title) %>
-<h1>
-  <%=  @entry.title %>
-  <%= @entry.body %>
-</h1>
+<div class="container">
+  <h1>
+    <%= @entry.title %> 
+  </h1>
 
- <div class="col-md-8">
-    <% if @entry.comments.any? %>
-      <h3>comment (<%= @entry.comments.count %>)</h3>
-      <ol class="microposts">
-        <%= render @comments %>
-      </ol>
-      <%= will_paginate @comments %>
-    <% end %>
+  <h2>
+    <%= @entry.user.name %>
+  </h2>
+
+  <div class="text-primary">
+    <strong>Content:</strong>
+    <%= @entry.body %>
   </div>
-  <%= render "shared/comment_form" %>
+
+  <%= render 'shared/comment_form' %>
+
+  <ul class="list-group-item">
+    <% if @comments.count > 0 %>
+        <strong>Comments:</strong>
+        <ol>
+          <%= render @comments %>
+        </ol>
+        <%= will_paginate @comments %>
+    <% else %>
+        <p>No comment yet!</p>
+    <% end %>
+  </ul>
+</div>
