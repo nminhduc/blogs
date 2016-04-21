@@ -1,0 +1,7 @@
+<li id="entry-<%= coment.id %>">
+  <span class="user"><%= link_to coment.user.name, coment.user %></span>
+  <span class="content"><%= coment.content %></span>
+  <span class="timestamp">
+    Posted <%= time_ago_in_words(entry.created_at) %> ago.
+  </span>
+</li>
